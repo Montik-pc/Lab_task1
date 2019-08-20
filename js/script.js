@@ -30,7 +30,7 @@ main.onclick = function(event) {
     } else if (target === buttonListSettings) {
         showListSettings(target);
 
-    } else if (target === content && document.querySelector('.list_settings')) {
+    } else if (target === main && document.querySelector('.list_settings')) {
         hideListSettings();
 
     } else if (target.classList.contains('but_list_notification')) {

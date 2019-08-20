@@ -18,7 +18,7 @@ task.Settings = (function() {
                                     '<label>Color: </label><input data-type="' + this.type + '" data-property="color" onblur="setInformation(event)" type="text" ' +
                                     'style="background-color: rgb(' + this.color + ');" value="' + this.color + '" title="Enter RGB color.">' +
                                     '<label>Time: </label><input  data-type="' + this.type + '" data-property="time" onblur="setInformation(event)" type="text" ' +
-                                    'value="' + this.time + '" title="Enter the message display time (1000 - 30000) ms."></form>';
+                                    'value="' + this.time + '" title="Enter the message display time (100 - 999999) ms."></form>';
     }
 
     Settings.prototype.show = function() {

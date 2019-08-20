@@ -13,6 +13,7 @@ task.Container = (function() {
         this.container.innerHTML = (this.button) ? '<h2>' + this.title + '</h2><input class="but_list_notification" type="button" value="' + this.button + '">' :
                                                     '<h2>' + this.title + '</h2>';
         this.container.setAttribute('class', this.type);
+        this.container.classList.add('animation_on');
     }
 
     Container.prototype.show = function() {
@@ -20,7 +21,11 @@ task.Container = (function() {
     }
 
     Container.prototype.hide = function() {
-        document.querySelector('.' + this.type).remove();
+        this.container.classList.toggle('animation_on');
+        this.container.classList.toggle('animation_off');
+        var self = document.querySelector('.' + this.type);
+
+        setTimeout(function(self) {self.remove()}, 450, self);
     }
 
     Container.prototype.statusButton = function(target, status) {
@@ -28,7 +33,16 @@ task.Container = (function() {
     }
 
     Container.prototype.showBackground = function() {
-        this.content.classList.toggle('background');
+        var fildBackground = document.querySelector('.background');
+
+        if (fildBackground) {
+            fildBackground.remove();
+
+        } else {
+            var fild = document.createElement('div');
+            document.querySelector('.main').appendChild(fild);
+            fild.classList.toggle('background');
+        }
     }
 
     return Container;
