@@ -2,152 +2,131 @@ var main = document.querySelector('.main'),
     content = document.querySelector('.content'),
     button = document.querySelector('.button'),
     buttonModalWindow = document.querySelector('.but_modal_window'),
-    buttonListNotifications = document.querySelector('.but_list_notifications');
-    
+    buttonListSettings = document.querySelector('.but_list_settings');
 
-function Field(type, content) {
-    this.type = type;
-}
+var Container = window.task.Container;
+var Settings = window.task.Settings;
+var Notification = window.task.Notification;
 
-Field.prototype.create = function() {
-    
-    this.field = document.createElement('div');
-    this.field.setAttribute('class', this.type);
-}
+var modalWindow = new Container('modal_window', content, 'The title of the modal window.'),
+    listSettings = new Container('list_settings', content, 'Notifications settings windows.', 'Show notifications'),
+    listNotifications = new Container('list_notifications', content);
 
-Field.prototype.show = function() {
-    content.appendChild(this.field);
-}
+var notifications = window.task.notifications;
 
-Field.prototype.hide = function() {
-    document.querySelector('.' + this.type).remove();
-}
-
-Field.prototype.showButton = function(target) {
-    target.classList.toggle('hidden');
-}
-
-Field.prototype.showBackground = function() {
-    content.classList.toggle('background');
-}
-
-var modalWindow = new Field('modal_window'),
-    listNotifications = new Field('list_notifications');
-
-
-
-
-
-function Notification(type, text, icon, color, time) {
-    Field.apply(this, arguments);
-    this.text = text;
-    this.icon = icon;
-    this.color = color;
-    this.time = time;
-    this.list = document.getElementsByClassName('list_notifications')[0];
-}
-
-Notification.prototype = Object.create(Field.prototype);
-Notification.prototype.constructor = Notification;
-
-Notification.prototype.create = function() {
-    Field.prototype.create.apply(this, arguments);
-    this.field.innerHTML = '<img class="icon" src="img/' + this.icon + '"><div><h3>' + this.type[0].toUpperCase() + this.type.slice(1) + '!!!</h3>' + this.text + '</div><img class="close_button" src="img/close_button.png">';
-}
-
-Notification.prototype.show = function() {
-    this.list.appendChild(this.field);
-    document.querySelector('.' + this.type).style.background = String(this.color);
-
-    this.timerId = setTimeout(Notification.prototype.hide, this.time, this, this.list);
-}
-
-Notification.prototype.hide = function(item, parent) {
-    var message = document.querySelector('.' + item.type);
-
-    if (parent.childNodes.length <= 1) {
-        parent.remove();
-        listNotifications.showButton(document.querySelector('.but_list_notifications'));
-
-    } else if (message) {
-        message.remove();
-
-    }
-
-        // (parent.childNodes.length > 1) ? message.remove() : (parent.remove(), listNotifications.showButton(document.querySelector('.but_list_notifications')));
-    
-}
-
-var notifications = {
-    error: {
-        type:'error',
-        text: 'Oops, something is wrong',
-        icon: 'error.png',
-        color: 'red',
-        time: 5000
-    },
-    warning: {
-        type: 'warning',
-        text: 'A new virus has been detected',
-        icon: 'warning.png',
-        color: 'orange',
-        time: 2000
-    },
-    success: {
-        type: 'success',
-        text: 'Everthing is fine',
-        icon: 'success.png',
-        color: 'green',
-        time: 3000
-    },
-    info: {
-        type: 'info',
-        text: 'Your attention is given the solution to task1',
-        icon: 'info.png',
-        color: 'silver',
-        time: 6000
-    }
-};
-
-var arrNotifications = [];
+var arrNotifications = [],
+    arrNotificationsForShow = [];
 
 main.onclick = function(event) {
-    var target = event.target;
+    var target = event.target,
+        modalWindowField = document.querySelector('.modal_window');
 
     if (target === buttonModalWindow) {
-        modalWindow.create();
-        modalWindow.show();
-        modalWindow.showButton(target);
-        modalWindow.showBackground();
+        showModalWindow(target);
 
-    } else if (event.currentTarget === main && document.querySelector('.modal_window') && target !== document.querySelector('.modal_window') ) {
-        modalWindow.hide();
-        modalWindow.showButton(buttonModalWindow);
-        modalWindow.showBackground();
+    } else if (event.currentTarget === main && modalWindowField && target !== modalWindowField && target.tagName !== 'H2') {
+        hideModalWindow();
     
-    } else if (target === buttonListNotifications) {
-        listNotifications.create();
-        listNotifications.show();
-        listNotifications.showButton(target);
+    } else if (target === buttonListSettings) {
+        showListSettings(target);
 
-        for (var key in notifications) {    
-            arrNotifications.push( new Notification(notifications[key].type, notifications[key].text, notifications[key].icon, notifications[key].color, notifications[key].time) );
-        }
+    } else if (target === content && document.querySelector('.list_settings')) {
+        hideListSettings();
 
-        arrNotifications.forEach(function(item) {
-            item.create();
-            item.show();
-            }
-        );
+    } else if (target.classList.contains('but_list_notification')) {
+        showNotifications(target);
+
+    } else if (target.classList.contains('close_button')) {
+        hideNotification(target);
     }
 }
 
-content.onclick = function(event) {
-    var target = event.target;
+function showModalWindow(target) {
+    modalWindow.create();
+    modalWindow.show();
+    modalWindow.statusButton(target, 1);
+    modalWindow.showBackground();
+}
 
-    if (target.classList[0] === 'close_button') {
-        // var arr = document.getElementsByClassName('close_button');
-        target.parentElement.remove();
+function hideModalWindow() {
+    modalWindow.hide();
+    modalWindow.statusButton(buttonModalWindow, 0);
+    modalWindow.showBackground();
+}
 
+function showListSettings(target) {
+    listSettings.create();
+    listSettings.show();
+    listSettings.statusButton(target, 1);
+    
+    for (var key in notifications) {    
+            arrNotifications.push( new Settings(notifications[key].type, notifications[key].color, notifications[key].time) );
+        }
+
+    arrNotifications.forEach(function(item) {
+        item.create();
+        item.show();
+        }
+    );
+}
+
+function hideListSettings() {
+    listSettings.hide();
+    listSettings.statusButton(buttonListSettings, 0);
+    arrNotifications = [];
+}
+
+function showNotifications(target) {
+    listNotifications.create();
+    listNotifications.show();
+    listNotifications.statusButton(target, 1);
+
+    for (var key in notifications) {    
+        arrNotificationsForShow.push( new Notification(notifications[key].type, notifications[key].text, notifications[key].icon, notifications[key].color, notifications[key].time) );
+        }
+
+        arrNotificationsForShow.forEach(function(item) {
+            item.create();
+            item.show();
+        });
+
+    listSettings.hide();
+}
+
+function hideNotification(target) {
+    var id = target.parentElement.getAttribute('data-timerId');
+
+    arrNotificationsForShow.forEach(function(item) {
+
+        if (item.timerId === +id) {
+            item.hide(item, item.list);
+        }
+    });
+
+    clearTimeout(id);
+}
+
+function setInformation(event) {
+    var target = event.currentTarget,
+        inputType = target.getAttribute('data-type'),
+        inputProperty = target.getAttribute('data-property'),
+        targetValue = notifications[inputType][inputProperty];
+
+    if (inputProperty === 'color' && /^(\d{1,3}), (\d{1,3}), (\d{1,3})$/.test(target.value)) {
+        target.innerHTML = target.value;
+        notifications[inputType][inputProperty] = target.value;
+        target.style = 'background-color: rgb(' + target.value + ')';
+
+    } else if (inputProperty === 'color') {
+        alert('Error. You must enter a color in RGB format 255, 255, 255.');
+        target.value = targetValue;
+
+    } else if (inputProperty === 'time' && /^([1-9])(\d{2,5})$/.test(target.value)){
+        target.innerHTML = target.value;
+        notifications[inputType][inputProperty] = target.value;
+
+    } else if (inputProperty === 'time') {
+        alert('Error. You must enter the time the message is displayed in the interval 100 - 999999 ms.');
+        target.value = targetValue;
     }
 }
