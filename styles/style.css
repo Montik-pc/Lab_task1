@@ -1,0 +1,171 @@
+body {
+    margin: 0;
+}
+
+.main {
+    height: 100%;
+}
+
+.but_modal_window,
+.but_list_settings,
+.but_list_notifications {
+    position: absolute;
+    width: 150px;
+    height: 35px;
+    margin: 15px;
+    background-color: rgb(210, 210, 210);
+    border-radius: 6px;
+}
+
+.but_list_settings {
+    left: 170px;
+}
+
+.modal_window {
+    position: absolute;
+    width: 400px;
+    height: 200px;
+    background-color:rgb(210, 210, 210);
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 5px solid rgb(34, 34, 34);
+    border-radius: 6px;
+    z-index: 1000;
+}
+
+.background {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(53, 52, 52);
+    opacity: 0.7;
+    z-index: 100;
+}
+
+.list_settings {
+    position: absolute;
+    width: 275px;
+    top: 55;
+    left: 185;
+    font-size: 12px;
+    background-color:  rgb(170, 170, 170);
+    border: 5px solid rgb(40, 40, 40);
+    border-radius: 6px;
+}
+
+.list_settings div {
+    width: calc(100% - 10px);
+    margin: 5px 5px;
+    background-color:  rgb(210, 210, 210);
+}
+
+input {
+    width: 90px;
+    margin: 2px 2px 2px;
+}
+
+.but_list_notification {
+    position: relative;
+    width: calc(100% - 20px);
+    height: 25px;
+    margin: 5px 10px;
+    border-radius: 6px;
+    border: 3px solid rgb(34, 34, 34);
+}
+
+.list_settings label {
+    margin-left: 4px;
+}
+
+h2 {
+    font-size: 16px;
+    margin: 0;
+    text-align: center;
+}
+
+h3 {
+    padding-left: 5px;
+    margin: 0;
+}
+
+.list_notifications {
+    position: absolute;
+    width: 210px;
+    height: 100%;
+    top: 0;
+    right: 0;
+}
+
+.error,
+.warning,
+.success,
+.info {
+    position: relative;
+    width: 200px;
+    height: 45px;
+    font-size: 12px;
+    margin: 3px;
+    border: 2px solid rgb(34, 34, 34);
+    border-radius: 6px;
+}
+
+.animation_on {
+    animation: animation_opacity_on 1s linear;
+}
+
+.animation_off {
+    animation: animation_opacity_off 0.5s linear;
+}
+
+@keyframes animation_opacity_on {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes animation_opacity_off {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.error div,
+.warning div,
+.success div,
+.info div {
+    position: relative;
+    width: calc(100% - 35px);
+    left: 35px;
+}
+
+.icon {
+    position: absolute;
+    float: left;
+    margin: auto 3px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.close_button {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+}
+
+@media (max-width: 780px) {
+
+    .modal_window {
+        width: calc(100% - 10px);
+        height: calc(100% - 10px);
+    }
+}
