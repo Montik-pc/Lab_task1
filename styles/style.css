@@ -161,3 +161,11 @@ h3 {
     top: 3px;
     right: 3px;
 }
+
+@media (max-width: 780px) {
+
+    .modal_window {
+        width: calc(100% - 10px);
+        height: calc(100% - 10px);
+    }
+}

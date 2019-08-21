@@ -33,10 +33,9 @@ task.Notification = (function() {
     Notification.prototype.hide = function(item, parentContainer) {
         var message = document.querySelector('.' + item.type);
 
-        if ( parentContainer.childNodes.length <= 2) {
+        if (parentContainer.childNodes.length <= 2) {
             parentContainer.remove();
             listSettings.statusButton(buttonListSettings, 0);
-            arrNotifications = [];
             arrNotificationsForShow = [];
 
         } else if (message) {
